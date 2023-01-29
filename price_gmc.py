@@ -1,9 +1,8 @@
-from core.price import Price
-from core.driver import Driver, By
+from core_mk.price import Price
+from core_mk.driver import Driver, By
 
 def gmc_art(articles, path_to_db = None, driver = None):
-    price_table = Price()
-    price_table.store = 'gmc'
+    price_table = Price('gmc')
     if driver:
         close_driver_on_exit = False
     else:
@@ -50,10 +49,7 @@ def gmc_art(articles, path_to_db = None, driver = None):
 
                 link = a_tags[2].get_attribute('href').split(r'/url?url=')[-1].split('&')[0].split('%')[0]
 
-                try:
-                    price = float(price.split(' ')[0].replace(',','.'))
-                except Exception:
-                    price = 0.0
+                price = get_price(price)
 
                 price_table.add(title = title, price = price, seller = seller, url = link)
 
@@ -62,8 +58,28 @@ def gmc_art(articles, path_to_db = None, driver = None):
     price_table.write(path_to_db)
     return len(price_table.data)
 
+def get_price(in_str):
+    out_str = ''
+    is_digits = True
+    for e in in_str.strip():
+        if e == ' ' and is_digits:
+            continue
+        if not e.isdigit():
+            is_digits = False
+        out_str += e
+
+    out_str = out_str.split(' ')[0]
+    out_str = out_str.replace(',', '.')
+    try:
+        out_float = float(out_str)
+    except Exception:
+        out_float = 0.0
+    return out_float
+
 if __name__ == '__main__':
     path_to_db = 'Price.db'
+    path_to_db = None
     articles = ['DH-IPC-HFW1431SP-S4']
     articles = ['DS-2CD1027G0-L(C)']
+    articles = ['DS-2CD1021-I']
     gmc_art(articles, path_to_db)

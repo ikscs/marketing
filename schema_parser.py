@@ -2,8 +2,8 @@ import re
 import json
 import extruct
 from urllib.parse import urlsplit
-from core.price import Price
-from core.driver import Driver, By
+from core_mk.price import Price
+from core_mk.driver import Driver, By
 
 def common_schema(data):
     title = ''
@@ -34,9 +34,8 @@ def rozetka_schema(data):
             pass
     return title, price
 
-def schema_parser(url, article, path_to_db = None, driver = None):
-    price_table = Price()
-    price_table.store = ''
+def schema_parser(url, article, store, path_to_db = None, driver = None):
+    price_table = Price(store)
 
     if driver:
         close_driver_on_exit = False
@@ -73,4 +72,4 @@ if __name__ == '__main__':
     path_to_db = 'Price.db'
     url = 'https://prom.ua/p1396374517-videokamera-hikvision-2cd2043g0.html'
     article = 'DS-2CD2043G0-I'
-    print(schema_parser(url, article, path_to_db))
+    print(schema_parser(url, article, 'prom', path_to_db))

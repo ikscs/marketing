@@ -1,9 +1,8 @@
-﻿from core.price import Price
-from core.driver import Driver, By
+﻿from core_mk.price import Price
+from core_mk.driver import Driver, By
 
 def rozetka_art(articles, path_to_db = None, driver = None):
-    price_table = Price()
-    price_table.store = 'rozetka'
+    price_table = Price('rozetka')
     if driver:
         close_driver_on_exit = False
     else:

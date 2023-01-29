@@ -1,11 +1,10 @@
-from core.price import Price
-from core.driver import Driver, By
+from core_mk.price import Price
+from core_mk.driver import Driver, By
 
 import re
 
 def hotline_art(articles, path_to_db = None, driver = None):
-    price_table = Price()
-    price_table.store = 'hotline'
+    price_table = Price('hotline')
     if driver:
         close_driver_on_exit = False
     else:
