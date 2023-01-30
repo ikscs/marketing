@@ -1,8 +1,8 @@
 #encoding: utf-8
-#CONFIG = {'subject_id': 'DEADBEEF', 'subject_role': 4, 'get_all_prices': True, 'super_group': 'competitors'}
-CONFIG = {'subject_id': 'nadzor', 'subject_role': 4, 'get_all_prices': True, 'super_group': 'competitors'}
+CONFIG = {'subject_id': 'DEADBEEF', 'subject_role': 4, 'get_all_prices': True,}
 
 def adapt_product(data_list):
+    sep = ' / '
     product_lists = []
     for idx, e in enumerate(data_list):
         adapted = dict()
@@ -10,8 +10,8 @@ def adapt_product(data_list):
         adapted['subject_id'] = e['store'] if e['store'] else CONFIG['subject_id']
         adapted['adapter_key'] = idx
         adapted['subject_role'] = CONFIG['subject_role']
-        adapted['product_group'] = e['seller']
-        adapted['product_id'] = None
+        adapted['product_group'] = sep.join((adapted['subject_id'], e['seller']))
+        adapted['product_id'] = e['article']
         adapted['manuf'] = None
         adapted['article'] = e['article']
         adapted['name'] = e['title']
@@ -34,12 +34,17 @@ def adapt_product(data_list):
 
 def adapt_group(data_list):
     sep = ' / '
-    parent = CONFIG['super_group']
     group_dict = dict()
-    group_dict[parent] = {'parent_group': None, 'product_group': parent, 'name': parent, 'subject_id': CONFIG['subject_id']}
     for row in data_list:
-        name = row['seller']
-        group_dict[name] = {'parent_group': parent, 'product_group': sep.join((parent, name)), 'name': name, 'subject_id': row['store'] if row['store'] else CONFIG['subject_id']}
+        subject_id = row['store']
+        seller = row['seller']
+        article = row['article']
+        parent = sep.join((subject_id, seller))
+        group = sep.join((parent, seller))
+        if not parent in group_dict:
+            group_dict[parent] = {'parent_group': None, 'product_group': parent, 'name': seller, 'subject_id': subject_id}
+#        if not group in group_dict:
+#            group_dict[group] = {'parent_group': parent, 'product_group': group, 'name': seller, 'subject_id': subject_id}
 
     group_lists = {'subject_id': [], 'parent_group': [], 'product_group': [], 'name': [],}
 
@@ -62,7 +67,19 @@ if __name__ == '__main__':
     data_list = dict_responce['data']
 
     groups = adapt_group(data_list)
-    print(groups)
+    #print(groups)
+    n = len(groups['subject_id'])
+    print(n)
+    h = set()
+    for i in range(n):
+        print(groups['subject_id'][i], '\t', groups['parent_group'][i], '\t', groups['product_group'][i], '\t', groups['name'][i])
+        h.add(f"{groups['subject_id'][i]}:{groups['parent_group'][i]}:{groups['product_group'][i]}")
+
+    print(n, len(h))
+
+    for i in range(3):
+        print(data_list[i]['article'], ':', data_list[i]['store'], ':', data_list[i]['seller'])
+    
     die
     products = adapt_product(data_list)
     print(products)

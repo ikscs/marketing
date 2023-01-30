@@ -10,8 +10,8 @@ from schema_parser import schema_parser
 
 if __name__ == '__main__':
 
-    path_to_db = 'Price.db'
-#    path_to_db = None
+#    path_to_db = 'Price.db'
+    path_to_db = None
 
     rez = empty_table('mk_price', engine=path_to_db)
 
