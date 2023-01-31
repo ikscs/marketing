@@ -1,10 +1,10 @@
 DB_mysql = {
+    'dbms' : 'mysql',
     'host' : '127.0.0.1',
     'user' : 'user',
     'password' : 'password',
     'database' : 'db',
 }
-
 
 DB_sqlite = {
     'dbms' : 'sqlite',
