@@ -33,5 +33,5 @@ os.chdir(current_path)
 
 if __name__ == '__main__':
     current_module = sys.modules[__name__]
-    provider = Provider(current_module, Informer(), is_offline=True, engine='test.db')
+    provider = Provider(current_module, Informer())
     provider.execute()

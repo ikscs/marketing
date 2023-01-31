@@ -13,16 +13,11 @@ import marketing.price_marketing
 
 if __name__ == '__main__':
 
-#    is_offline = True
-    is_offline = False
-#    engine = Path('test.db').resolve()
-    engine = None
-
     log = Logger('mk_to_clever', os.getcwd(), is_overwrite=False)
     log.info('===================\nmarketing started')
 
     informer = Informer()
-    provider = Provider(marketing.price_marketing, informer, is_offline=is_offline, engine=engine)
+    provider = Provider(marketing.price_marketing, informer)
 
     provider.execute_block1()
     provider.execute_block2()

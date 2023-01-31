@@ -34,7 +34,7 @@ def rozetka_schema(data):
             pass
     return title, price
 
-def schema_parser(url, article, store, path_to_db = None, driver = None):
+def schema_parser(url, article, store, driver=None):
     price_table = Price(store)
 
     if driver:
@@ -62,14 +62,13 @@ def schema_parser(url, article, store, path_to_db = None, driver = None):
         driver.close()
 
     price_table.add(title = title, price = price, seller = seller, url = url)
-    price_table.write(path_to_db)
+    price_table.write()
     if price == 0:
         return 0
 
     return len(price_table.data)
 
 if __name__ == '__main__':
-    path_to_db = 'Price.db'
     url = 'https://prom.ua/p1396374517-videokamera-hikvision-2cd2043g0.html'
     article = 'DS-2CD2043G0-I'
-    print(schema_parser(url, article, 'prom', path_to_db))
+    print(schema_parser(url, article, 'prom'))

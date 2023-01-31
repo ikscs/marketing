@@ -4,63 +4,39 @@ import traceback
 from sqlalchemy import create_engine
 import mysql.connector
 import sqlite3
-#import sqlalchemy
 
 try:
     from core_mk.credentials import DB
 except Exception:
     from credentials import DB
 
-LOG_FNAME = "price_log.txt"
-engine_str = f'mysql+pymysql://{DB["user"]}:{DB["password"]}@{DB["host"]}/{DB["database"]}'
+dbms = DB.get('dbms', 'mysql')
+if dbms == 'mysql':
+    engine = create_engine(f'mysql+pymysql://{DB["user"]}:{DB["password"]}@{DB["host"]}/{DB["database"]}')
+else:
+    #sqlite only
+    engine = create_engine(f'sqlite:///{DB["file"]}', echo=False)
 
+LOG_FNAME = "price_log.txt"
 last_date = None
 
-def write2database(df, table, engine=None):
+def write2database(df, table):
     global last_date
     if not last_date:
         last_date = datetime.datetime.now()
-
-#    print(1111, engine)
-    if engine == None:
-        engine = create_engine(engine_str)
-#        print(777, engine)
-    else:
-        engine = create_engine('sqlite:///' + engine, echo=False)
-
-#    print(2222, engine)
-    result = 1
 
     try:
         df_dates = pd.DataFrame()
         df_dates['date'] = [last_date]*df.shape[0]
         df = df_dates.join(df)
-
-#        dtype = {
-#         'article': sqlalchemy.types.NVARCHAR(length=255),
-#         'title': sqlalchemy.types.NVARCHAR(length=255),
-#         'price': sqlalchemy.types.Float(),
-#         'store': sqlalchemy.types.NVARCHAR(length=50),
-#         'seller': sqlalchemy.types.NVARCHAR(length=255),
-#         'url': sqlalchemy.types.NVARCHAR(length=255),
-#         }
-
         r = df.to_sql(table, con=engine, if_exists='append', index=False)
-#        df.to_sql(table, con=engine, if_exists='append', index=False)
-#        print(r, engine_str, engine)
-#        print(r, df)
     except Exception as err:
         print(err)
         log_error(f'Problem with download {table} to sql {err}')
-        result = 0
-    return result
+        return 0
+    return 1
 
-def load_table(table, engine=None):
-    if engine == None:
-        engine = create_engine(engine_str)
-    else:
-        engine = create_engine('sqlite:///' + engine, echo=False)
-
+def load_table(table):
     try:
         df = pd.read_sql_table(table, con=engine)
         result = df.to_dict('records')
@@ -69,12 +45,13 @@ def load_table(table, engine=None):
         result = []
     return result
 
-def empty_table(table, engine=None):
-    if engine == None:
+def empty_table(table):
+    if dbms == 'mysql':
         mydb = mysql.connector.connect(host=DB['host'], user=DB['user'], password=DB['password'], database=DB['database'], autocommit = True)
         cursor = mydb.cursor(buffered=True)
     else:
-        mydb = sqlite3.connect(engine)
+        #sqlite only
+        mydb = sqlite3.connect(DB["file"])
         cursor = mydb.cursor()
 
     sql = f'DELETE FROM {table}'
@@ -85,7 +62,7 @@ def empty_table(table, engine=None):
     except Exception as err:
         rez = str(err)
 
-    if engine == None:
+    if dbms == 'mysql':
         cursor.reset()
     cursor.close()
     mydb.close()

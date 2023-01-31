@@ -3,7 +3,7 @@ from core_mk.driver import Driver, By
 
 import re
 
-def hotline_art(articles, path_to_db = None, driver = None):
+def hotline_art(articles, driver=None):
     price_table = Price('hotline')
     if driver:
         close_driver_on_exit = False
@@ -70,10 +70,9 @@ def hotline_art(articles, path_to_db = None, driver = None):
 
     if close_driver_on_exit:
         driver.close()
-    price_table.write(path_to_db)
+    price_table.write()
     return len(price_table.data)
 
 if __name__ == '__main__':
-    path_to_db = 'Price.db'
     articles = ['DH-IPC-HFW1431SP-S4', 'DH-IPC-HFW1431SP', 'DH-IPC-HFW', 'DH-IPC']
-    hotline_art(articles, path_to_db)
+    hotline_art(articles)

@@ -4,7 +4,7 @@ import html
 from core_mk.price import Price
 from core_mk.driver import Driver, By
 
-def prom_art(articles, path_to_db = None, driver = None):
+def prom_art(articles, driver=None):
     price_table = Price('prom')
     if driver:
         close_driver_on_exit = False
@@ -52,14 +52,11 @@ def prom_art(articles, path_to_db = None, driver = None):
 
     if close_driver_on_exit:
         driver.close()
-    price_table.write(path_to_db)
+    price_table.write()
     return len(price_table.data)
 
 if __name__ == '__main__':
-    path_to_db = 'Price.db'
-    path_to_db = None
-
     articles = ['DH-IPC-HFW1431SP-S4']
 #    articles = ['DS-2CD1021-I(F)']
 #    articles = ['90NB0Y61-M001E0']
-    prom_art(articles, path_to_db)
+    prom_art(articles)
