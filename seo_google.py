@@ -3,7 +3,7 @@ import datetime
 import pandas as pd
 import sqlalchemy
 from sqlalchemy import create_engine
-from connection import connection_to_db
+#from connection import connection_to_db
 from time import sleep
 import traceback
 from core_mk.credentials import GoogleAPI, DB
