@@ -8,3 +8,5 @@ mysql-connector-python
 selenium
 webdriver-manager
 extruct
+google-api-python-client
+MySQL-python
