@@ -27,7 +27,7 @@ from core.informer import Informer
 sys.path.append(MODULE_FOLDER)
 exec(f'from loader_{SUBJECT_FNAME} import Loader')
 exec(f'from manager_{SUBJECT_FNAME} import dict2data')
-exec(f'from adapter_{SUBJECT_FNAME} import adapt_product, adapt_group, beautify')
+exec(f'import adapter_{SUBJECT_FNAME} as adapter')
 
 os.chdir(current_path)
 

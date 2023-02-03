@@ -59,6 +59,10 @@ def adapt_group(data_list):
 def beautify(data_list):
     return data_list
 
+def group_rebuid(groups):
+    #dummy
+    return False
+
 if __name__ == '__main__':
     #Implementation example
     Timestamp = lambda x: x
