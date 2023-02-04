@@ -19,11 +19,11 @@ def adapt_product(data_list):
         adapted['currency'] = 'UAH'
         adapted['ControlRRP'] = None
         adapted['rrp'] = None
-        adapted['price_buy'] = e['price']
-        adapted['price_sell'] = None
-        adapted['product_pic_url'] = e['url']
+        adapted['price_buy'] = None
+        adapted['price_sell'] = e['price']
+        adapted['product_pic_url'] = None
         adapted['eu'] = None
-        adapted['site_prod_id'] = None
+        adapted['site_prod_id'] = e['url']
         adapted['product_exists'] = 1
         adapted['gtin'] = None
 
