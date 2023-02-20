@@ -75,8 +75,11 @@ def log_info(s):
      _log(s, is_error=False)
 
 def _log(s, is_error):
-    with open(LOG_FNAME, 'a', encoding='utf-8') as f:
-        f.write('\n' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '\n')
-        f.write(s + '\n')
-        if is_error:
-            traceback.print_exc(file=f)
+    try:
+        with open(LOG_FNAME, 'a', encoding='utf-8') as f:
+            f.write('\n' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + '\n')
+            f.write(s + '\n')
+            if is_error:
+                traceback.print_exc(file=f)
+    except Exception as err:
+        print(err)

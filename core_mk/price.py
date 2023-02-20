@@ -3,9 +3,9 @@ import pandas as pd
 #import sqlalchemy
 
 try:
-    from core_mk.core_io import write2database, log_error, log_info
+    from core_mk.core_io import write2database
 except Exception:
-    from core_io import write2database, log_error, log_info
+    from core_io import write2database
 
 class Price():
     def __init__(self, store):
